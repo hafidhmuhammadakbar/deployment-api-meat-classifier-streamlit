@@ -1,12 +1,18 @@
 import streamlit as st
 import tensorflow as tf
-from PIL import Image
 import numpy as np
 import requests
+from flask import Flask, request, jsonify
+from PIL import Image
+from pyngrok import ngrok
 from io import BytesIO
 
 # Load the model
 model = tf.keras.models.load_model('beef_pork_horse_classifier.h5')
+
+port_no = 8080
+ngrok.set_auth_token("2fS5nDZnBgMJIj3lOk8RTELAZnO_5zgiBpF7hX6nHo7xcjrb9")
+public_url =  ngrok.connect(port_no).public_url
 
 # function to predict image from URL for the Streamlit UI
 def predict(url):

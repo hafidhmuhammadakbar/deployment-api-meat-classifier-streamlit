@@ -3,3 +3,4 @@ numpy==1.26.4
 Pillow==10.3.0
 requests==2.31.0
 streamlit==1.33.0
+pyngrok==7.1.6
