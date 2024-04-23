@@ -1,15 +1,20 @@
-from flask import Flask, request, jsonify
 import streamlit as st
 import tensorflow as tf
-from PIL import Image
 import numpy as np
 import requests
+from flask import Flask, request, jsonify
+from PIL import Image
+from pyngrok import ngrok
 from io import BytesIO
 
 app = Flask(__name__)
 
 # Load the model
 model = tf.keras.models.load_model('beef_pork_horse_classifier.h5')
+
+port_no = 8080
+ngrok.set_auth_token("2fS5nDZnBgMJIj3lOk8RTELAZnO_5zgiBpF7hX6nHo7xcjrb9")
+public_url =  ngrok.connect(port_no).public_url
 
 # function to predict image from URL for the Streamlit UI
 def predict_ui(url):
@@ -85,8 +90,7 @@ st.title('Beef, Pork, and Horse Classifier')
 st.markdown('This app predicts whether an image contains beef, pork, or horse.')
 
 # Add a redirect hyperlink
-api_url = 'http://meat-classifier-api.streamlit.app:5000'
-st.markdown(f'[Redirect to API]({api_url})')
+st.markdown(f'[Redirect to API]({public_url})')
 
 # Input image URL
 url = st.text_input('Enter Image URL:')
@@ -101,4 +105,4 @@ if st.button('Predict'):
             st.success(f'Probabilities: {result["probabilities"]}%')
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=8080)
+    app.run(host='0.0.0.0', port=port_no)
